@@ -16,6 +16,7 @@ const ColunaContainer = styled.div`
 `;
 const ColunaContent = styled.div`
   margin: 15px;
+  width: 100%fit-content;
 `;
 const TopRow = styled.div`
   button {
@@ -40,7 +41,7 @@ const Text = styled.h1`
   line-height: 25px;
 `;
 const Icon = styled.h1`
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   font-size: 18px;
   line-height: 25px;
   color: none;
@@ -96,22 +97,25 @@ export default function Coluna(props) {
   const index = props.index;
 
   function SubmitNewCard() {
-    const dados = {
-      card: {
-        name: Card,
-        id: Math.random(),
-        tags: [
-          {
-            name: `Tag ${index}`,
-            id: Math.random(),
-          },
-        ],
-      },
-      index,
-    };
-    setCard("");
-    setCardinput(false);
-    dispatch(NewCard(dados));
+    if (Card !== "") {
+      const dados = {
+        card: {
+          name: Card,
+          id: Math.random(),
+          tags: [
+            {
+              name: `Tag ${index + 1}`,
+              id: Math.random(),
+            },
+          ],
+        },
+        index,
+      };
+      console.log(dados);
+      setCard("");
+      setCardinput(false);
+      dispatch(NewCard(dados));
+    } else window.alert("Por favor, insíra um titulo");
   }
 
   function EnterToSave(e) {
@@ -134,8 +138,14 @@ export default function Coluna(props) {
         </TextIcon>
 
         <TasksContainer>
-          {coluna.cards.map((card) => (
-            <Tarefas card={card} key={card.id} color={coluna.color} />
+          {coluna.cards.map((card, cardindex) => (
+            <Tarefas
+              card={card}
+              key={card.id}
+              color={coluna.color}
+              cardindex={cardindex}
+              columnindex={index}
+            />
           ))}
         </TasksContainer>
         {cardinput && (
@@ -145,13 +155,14 @@ export default function Coluna(props) {
               onChange={(event) => setCard(event.target.value)}
               value={Card}
               onKeyDown={EnterToSave}
+              autoFocus
             ></FakeCard>
           </FakeCardContainer>
         )}
       </ColunaContent>
 
       <NewCardButton onClick={() => setCardinput(true)}>
-        <img src={plusbranco} />
+        <img src={plusbranco} alt="plus branco" />
         <button>Adicionar novo cartão</button>
       </NewCardButton>
     </ColunaContainer>

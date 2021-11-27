@@ -5,8 +5,11 @@ import Coluna from "../Coluna";
 import { useState } from "react";
 import { NewColumn } from "../../Store/kanban";
 import pluspreto from "../../assets/preto.svg";
+import { ToastContainer, toast } from "react-toastify";
 
-const MainComponent = styled.div``;
+const MainComponent = styled.div`
+  width: fit-content;
+`;
 const Titulo = styled.h1``;
 const Content = styled.div`
   display: flex;
@@ -19,6 +22,7 @@ const Newcolumn = styled.button`
   border: none;
   outline: none;
   height: 54px;
+  margin-right: 50px;
 
   background-color: #cad1d5;
   color: #43474b;
@@ -70,18 +74,21 @@ export default function Kanban() {
   const [inputvalue, setInputvalue] = useState("");
   const [color, setColor] = useState("#5cc4ff");
 
+  console.log(data);
   function SubmitNewColumn() {
-    const dados = {
-      icon: "📋",
-      name: inputvalue,
-      id: Math.random(),
-      color: color,
-      cards: [],
-    };
+    if (inputvalue !== "") {
+      const dados = {
+        icon: "📋",
+        name: inputvalue,
+        id: Math.random(),
+        color: color,
+        cards: [],
+      };
 
-    setInputvalue("");
-    setNewInput(false);
-    dispatch(NewColumn(dados));
+      setInputvalue("");
+      setNewInput(false);
+      dispatch(NewColumn(dados));
+    } else window.alert("Por favor, insíra um titulo");
   }
 
   function EnterToSave(e) {
@@ -96,6 +103,7 @@ export default function Kanban() {
   return (
     <MainComponent>
       <Titulo>Kanban do projeto</Titulo>
+
       <Content>
         {data.map((coluna, index) => (
           <Coluna
@@ -112,11 +120,12 @@ export default function Kanban() {
               onChange={(event) => setInputvalue(event.target.value)}
               value={inputvalue}
               onKeyDown={EnterToSave}
+              autoFocus
             />
           </INPUTBOX>
         )}
         <Newcolumn onClick={() => setNewInput(true)}>
-          <img src={pluspreto} />
+          <img src={pluspreto} alt="pluspreto" />
           <NewColumnContent>Adicionar nova coluna</NewColumnContent>
         </Newcolumn>
       </Content>

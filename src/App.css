@@ -1,6 +1,11 @@
+@font-face {
+  font-family: Avenir next;
+  src: url(/src/fonts/AvenirNextLTPro-Regular.otf);
+}
 * {
   margin: 0px;
   padding: 0px;
+  font-family: Avenir next;
 }
 
 body {
