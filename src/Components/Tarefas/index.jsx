@@ -27,14 +27,10 @@ const CardN = styled.div`
 `;
 
 const TagsContainer = styled.div`
-  box-sizing: border-box;
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  box-sizing: content-box;
   gap: 5px;
-  overflow-x: wrap;
-  width: 260px;
   margin-bottom: 5px;
 `;
 
