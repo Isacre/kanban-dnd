@@ -115,10 +115,10 @@ const KanbanReducer = createSlice({
     NewColumn(state, action) {
       state.column.push(action.payload);
     },
-
     NewCard(state, action) {
-      const index = state.findIndex((e) => e._id);
-      state.column[index].cards.push(action.payload);
+      const { payload } = action;
+      const { index, card } = payload;
+      state.column[index].cards.push(card);
     },
     NewTag(state, action) {
       state.column = action.payload;

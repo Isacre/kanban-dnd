@@ -78,9 +78,19 @@ export default function Kanban() {
       color: color,
       cards: [],
     };
+
     setInputvalue("");
     setNewInput(false);
     dispatch(NewColumn(dados));
+  }
+
+  function EnterToSave(e) {
+    if (e.key === "Enter") SubmitNewColumn();
+
+    if (e.key === "Escape") {
+      e.target.value = "";
+      setNewInput(false);
+    }
   }
 
   return (
@@ -88,7 +98,12 @@ export default function Kanban() {
       <Titulo>Kanban do projeto</Titulo>
       <Content>
         {data.map((coluna, index) => (
-          <Coluna coluna={coluna} key={coluna.id} inputvalue={inputvalue} />
+          <Coluna
+            coluna={coluna}
+            key={coluna.id}
+            inputvalue={inputvalue}
+            index={index}
+          />
         ))}
         {NewInput && (
           <INPUTBOX>
@@ -96,8 +111,8 @@ export default function Kanban() {
               placeholder="Digite o nome da coluna  e pressione enter"
               onChange={(event) => setInputvalue(event.target.value)}
               value={inputvalue}
+              onKeyDown={EnterToSave}
             />
-            {/*  <button onClick={SubmitNewColumn}>Test</button> */}
           </INPUTBOX>
         )}
         <Newcolumn onClick={() => setNewInput(true)}>

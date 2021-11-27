@@ -35,6 +35,7 @@ const DeleteButton = styled.button`
   outline: none;
 `;
 const AddTagButton = styled.button``;
+
 export default function Tarefas(props) {
   const color = props.color;
   const card = props.card;

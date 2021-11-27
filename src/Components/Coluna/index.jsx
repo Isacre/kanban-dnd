@@ -93,15 +93,34 @@ export default function Coluna(props) {
   const [cardinput, setCardinput] = useState(false);
   const [Card, setCard] = useState("");
   const coluna = props.coluna;
+  const index = props.index;
 
   function SubmitNewCard() {
     const dados = {
-      name: Card,
-      id: Math.random(),
+      card: {
+        name: Card,
+        id: Math.random(),
+        tags: [
+          {
+            name: `Tag ${index}`,
+            id: Math.random(),
+          },
+        ],
+      },
+      index,
     };
     setCard("");
     setCardinput(false);
     dispatch(NewCard(dados));
+  }
+
+  function EnterToSave(e) {
+    if (e.key === "Enter") SubmitNewCard();
+
+    if (e.key === "Escape") {
+      e.target.value = "";
+      setCardinput(false);
+    }
   }
 
   return (
@@ -125,6 +144,7 @@ export default function Coluna(props) {
               placeholder="Digite o titulo do card e pressione Enter "
               onChange={(event) => setCard(event.target.value)}
               value={Card}
+              onKeyDown={EnterToSave}
             ></FakeCard>
           </FakeCardContainer>
         )}
