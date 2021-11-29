@@ -2,6 +2,16 @@
   font-family: Avenir next;
   src: url(/src/fonts/AvenirNextLTPro-Regular.otf);
 }
+
+@font-face {
+  font-family: AvenirBold;
+  src: url(/src/fonts/AvenirNextLTPro-Bold.otf);
+}
+
+@font-face {
+  font-family: AvenirItalic;
+  src: url(/src/fonts/AvenirNextLTPro-It.otf);
+}
 * {
   margin: 0px;
   padding: 0px;

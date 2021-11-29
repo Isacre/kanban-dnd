@@ -1,5 +1,17 @@
+import {
+  ColunaContainer,
+  ColunaContent,
+  TopRow,
+  TasksContainer,
+  TextIcon,
+  Text,
+  Icon,
+  NewCardButton,
+  FakeCardContainer,
+  FakeCard,
+} from "./styles";
+
 import React from "react";
-import styled from "styled-components";
 import Tarefas from "../Tarefas";
 import plusbranco from "../../assets/branco.svg";
 import dotsMenu from "../../assets/dots-vertical.png";
@@ -8,99 +20,6 @@ import { useDispatch } from "react-redux";
 import { NewCard, DeleteColumn } from "../../Store/kanban/index";
 import { toast } from "react-toastify";
 import { Droppable } from "react-beautiful-dnd";
-
-const ColunaContainer = styled.div`
-  background-color: ${(props) => props.color};
-  height: 100%;
-  min-width: 315px;
-  margin-top: 40px;
-  border-radius: 5px;
-  border-top: 5px solid rgba(0, 0, 0, 10%);
-`;
-const ColunaContent = styled.div`
-  margin: 15px;
-  width: 100%fit-content;
-`;
-const TopRow = styled.div`
-  button {
-    float: right;
-    color: red;
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
-
-  img {
-    width: 20px;
-
-    :hover {
-      background: rgba(255, 255, 255, 30%);
-      border-radius: 25px;
-    }
-  }
-`;
-const TasksContainer = styled.div``;
-const TextIcon = styled.div`
-  font-size: 18px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-const Text = styled.h1`
-  color: white;
-  font-size: 18px;
-  line-height: 25px;
-`;
-const Icon = styled.p`
-  margin-bottom: 2px;
-  font-size: 21px;
-  line-height: 25px;
-  cursor: pointer;
-`;
-
-const NewCardButton = styled.div`
-  display: flex;
-  cursor: pointer;
-
-  button {
-    cursor: pointer;
-    background: transparent;
-    outline: none;
-    border: none;
-    color: rgba(255, 255, 255, 80%);
-    font-size: 16px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-  }
-  img {
-    cursor: pointer;
-
-    margin-left: 12px;
-    margin-bottom: 10px;
-  }
-`;
-const FakeCardContainer = styled.div`
-  line-height: 50px;
-  border: none;
-  background: white;
-  width: 100%;
-  border-radius: 5px;
-  outline: none;
-  text-align: center;
-`;
-const FakeCard = styled.input`
-  line-height: 40px;
-  margin: auto;
-  border: none;
-  width: 90%;
-
-  outline: none;
-  ::placeholder {
-    text-align: center;
-  }
-`;
 
 export default function Coluna(props) {
   const dispatch = useDispatch();
@@ -194,7 +113,7 @@ export default function Coluna(props) {
 
       <NewCardButton onClick={() => setCardinput(true)}>
         <img src={plusbranco} alt="plus branco" />
-        <button>Adicionar novo cartão</button>
+        <button>Adicionar outro cartão</button>
       </NewCardButton>
     </ColunaContainer>
   );

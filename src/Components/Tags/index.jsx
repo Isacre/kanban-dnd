@@ -1,23 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import { TagContainer } from "./styles";
+
 import { useDispatch } from "react-redux";
 import { DeleteTg } from "../../Store/kanban";
-
-const TagsComponent = styled.div``;
-
-const TagContainer = styled.div`
-  background-color: ${(props) => props.color};
-  color: white;
-  padding: 5px 10px;
-  font-size: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  :hover {
-    transition: 0.5s;
-    background: red;
-  }
-`;
 
 export default function Tags(props) {
   const tag = props.tag;
@@ -38,10 +23,8 @@ export default function Tags(props) {
   }
 
   return (
-    <TagsComponent>
-      <TagContainer onClick={DeleteTag} color={color}>
-        {tag?.name}
-      </TagContainer>
-    </TagsComponent>
+    <TagContainer onClick={DeleteTag} color={color}>
+      {tag?.name}
+    </TagContainer>
   );
 }
