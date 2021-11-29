@@ -1,22 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
 import Coluna from "../Coluna";
-import { useState } from "react";
-import { NewColumn } from "../../Store/kanban";
 import pluspreto from "../../assets/preto.svg";
-import { ToastContainer, toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { MoveCardToColumn, NewColumn } from "../../Store/kanban";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DragDropContext } from "react-beautiful-dnd";
+import { ChromePicker } from "react-color";
 
 const MainComponent = styled.div`
   width: fit-content;
 `;
-const Titulo = styled.h1``;
-const Content = styled.div`
+const Title = styled.h1``;
+
+const Columns = styled.div`
   display: flex;
   gap: 20px;
 `;
 
-const Newcolumn = styled.button`
+const AddColumnButton = styled.button`
   width: 315px;
   border-radius: 5px;
   border: none;
@@ -36,8 +40,8 @@ const Newcolumn = styled.button`
   }
 `;
 
-const INPUTBOX = styled.div`
-  background-color: #5cc4ff;
+const NewColumnInput = styled.div`
+  background-color: ${(props) => props.color};
   width: 315px;
   height: 100%;
   border-radius: 5px;
@@ -60,75 +64,100 @@ const INPUTBOX = styled.div`
   }
 `;
 
-const NewColumnContent = styled.div`
+const NewColumnText = styled.div`
   margin: auto;
   margin-left: 5px;
   margin-top: 19px;
   font-size: 16px;
 `;
 
+const DIV = styled.div`
+  width: 100%;
+  display: grid;
+  place-items: center;
+`;
+
 export default function Kanban() {
   const data = useSelector((state) => state.kanban.column);
+  console.log(data);
+
   const dispatch = useDispatch();
-  const [NewInput, setNewInput] = useState(false);
-  const [inputvalue, setInputvalue] = useState("");
+  const [NewInputOn, setNewInputOn] = useState(false);
+  const [ColumnName, setColumnName] = useState("");
   const [color, setColor] = useState("#5cc4ff");
 
-  console.log(data);
   function SubmitNewColumn() {
-    if (inputvalue !== "") {
+    if (ColumnName !== "") {
       const dados = {
         icon: "📋",
-        name: inputvalue,
-        id: Math.random(),
+        name: ColumnName,
+        id: `coluna - ${Math.floor(Math.random() * 101)}`,
         color: color,
         cards: [],
       };
-
-      setInputvalue("");
-      setNewInput(false);
+      setColumnName("");
+      setNewInputOn(false);
       dispatch(NewColumn(dados));
-    } else window.alert("Por favor, insíra um titulo");
+    } else toast.error("Por favor, insíra um titulo na coluna");
   }
 
   function EnterToSave(e) {
     if (e.key === "Enter") SubmitNewColumn();
 
     if (e.key === "Escape") {
-      e.target.value = "";
-      setNewInput(false);
+      setNewInputOn(false);
+      setColumnName("");
     }
   }
 
   return (
     <MainComponent>
-      <Titulo>Kanban do projeto</Titulo>
+      <ToastContainer />
+      <Title>Kanban do projeto</Title>
 
-      <Content>
-        {data.map((coluna, index) => (
-          <Coluna
-            coluna={coluna}
-            key={coluna.id}
-            inputvalue={inputvalue}
-            index={index}
-          />
-        ))}
-        {NewInput && (
-          <INPUTBOX>
+      <Columns>
+        <DragDropContext
+          onDragEnd={(result) => {
+            if (result.destination === null) return null;
+
+            dispatch(
+              MoveCardToColumn({
+                SourceIndex: result.source.droppableId,
+                DestinationIndex: result.destination.droppableId,
+                CardId: result.draggableId,
+                ColumnIndex: result.destination.index,
+              })
+            );
+          }}
+        >
+          {data.map((coluna, index) => (
+            <Coluna coluna={coluna} key={coluna.id} index={index} />
+          ))}
+        </DragDropContext>
+
+        {NewInputOn && (
+          <NewColumnInput color={color}>
             <input
               placeholder="Digite o nome da coluna  e pressione enter"
-              onChange={(event) => setInputvalue(event.target.value)}
-              value={inputvalue}
+              onChange={(event) => setColumnName(event.target.value)}
+              value={ColumnName}
               onKeyDown={EnterToSave}
               autoFocus
             />
-          </INPUTBOX>
+            <DIV>
+              <ChromePicker
+                color={color}
+                onChange={(updatedcolor) => setColor(updatedcolor.hex)}
+                margin="auto"
+              />
+            </DIV>
+          </NewColumnInput>
         )}
-        <Newcolumn onClick={() => setNewInput(true)}>
+        <AddColumnButton onClick={() => setNewInputOn(true)}>
           <img src={pluspreto} alt="pluspreto" />
-          <NewColumnContent>Adicionar nova coluna</NewColumnContent>
-        </Newcolumn>
-      </Content>
+          <NewColumnText>Adicionar nova coluna</NewColumnText>
+        </AddColumnButton>
+      </Columns>
     </MainComponent>
   );
 }

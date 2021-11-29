@@ -5,46 +5,46 @@ const initialState = {
     {
       icon: "📋",
       name: "To Do",
-      id: "1",
+      id: `coluna - ${Math.floor(Math.random() * 101)}`,
       color: "#5CC4FF",
       cards: [
         {
           name: "Documentar padrões mobile",
-          id: "13323232",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 1",
-              id: "2331",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
         {
           name: "Ajustar fluxo de compra",
-          id: "11332312",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 1",
-              id: "2111",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
         {
           name: "Banners da home",
-          id: "1412412",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 1",
-              id: "24124141",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
         {
           name: "Template de e-mail marketing",
-          id: "124124",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 1",
-              id: "412421",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
@@ -53,16 +53,16 @@ const initialState = {
     {
       icon: "💻",
       name: "In progress",
-      id: "2",
+      id: `coluna - ${Math.floor(Math.random() * 101)}`,
       color: "#945AD1",
       cards: [
         {
           name: "Wireframe das telas",
-          id: "12312",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 2",
-              id: "2131231",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
@@ -71,36 +71,36 @@ const initialState = {
     {
       icon: "🚀",
       name: "Done",
-      id: "3",
+      id: `coluna - ${Math.floor(Math.random() * 10991)}`,
       color: "#59D090",
       cards: [
         {
           name: "Implementação do blog",
-          id: "12",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 3",
-              id: "21",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
         {
           name: "Análise de métricas",
-          id: "12",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 3",
-              id: "21",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
         {
           name: "UX Review",
-          id: "12",
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: "Tag 3",
-              id: "21",
+              id: `tag - ${Math.floor(Math.random() * 10991)}`,
             },
           ],
         },
@@ -125,9 +125,48 @@ const KanbanReducer = createSlice({
       const { columnindex, cardindex, tag } = payload;
       state.column[columnindex].cards[cardindex].tags.push(tag);
     },
+    DeleteColumn(state, action) {
+      state.column.splice(action.payload, 1);
+    },
+    DeleteCard(state, action) {
+      const { payload } = action;
+      const { columnindex, cardindex } = payload;
+      state.column[columnindex].cards.splice([cardindex], 1);
+    },
+
+    DeleteTg(state, action) {
+      const { payload } = action;
+      const { columnindex, cardindex, tagindex } = payload;
+      state.column[columnindex].cards[cardindex].tags.splice([tagindex], 1);
+    },
+    MoveCardToColumn(state, action) {
+      const { payload } = action;
+      const { SourceIndex, DestinationIndex, CardId, ColumnIndex } = payload;
+      const sourceColumn = state.column.find(
+        (column) => column.id === SourceIndex
+      );
+      const destinationColumn = state.column.find(
+        (column) => column.id === DestinationIndex
+      );
+      const cardIndex = sourceColumn.cards.findIndex(
+        (card) => card.id === CardId
+      );
+      const transferCard = { ...sourceColumn.cards[cardIndex] };
+      sourceColumn.cards.splice(cardIndex, 1);
+      destinationColumn.cards.splice(ColumnIndex, 0, transferCard);
+    },
   },
 });
 
-export const { SaveCards, NewColumn, NewCard, CardName, NewTag } =
-  KanbanReducer.actions;
+export const {
+  SaveCards,
+  NewColumn,
+  NewCard,
+  CardName,
+  NewTag,
+  DeleteColumn,
+  DeleteCard,
+  DeleteTg,
+  MoveCardToColumn,
+} = KanbanReducer.actions;
 export default KanbanReducer.reducer;

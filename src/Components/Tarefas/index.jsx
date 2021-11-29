@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import Tags from "../Tags";
-import { NewTag } from "../../Store/kanban/index";
+import { NewTag, DeleteCard } from "../../Store/kanban/index";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { Draggable } from "react-beautiful-dnd";
 
 const TarefasComponent = styled.div`
   background-color: #fff;
@@ -21,13 +23,14 @@ const TarefasComponent = styled.div`
   }
 `;
 const CardN = styled.div`
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 16px;
   line-height: 21px;
+  word-break: break-all;
 `;
 
 const TagsContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
@@ -42,6 +45,17 @@ const FakeTagInput = styled.input`
   padding-left: 5px;
   padding-right: 5px;
   width: 95%;
+`;
+const TopRow = styled.div`
+  height: 0px;
+  button {
+    float: right;
+    color: red;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
 `;
 
 export default function Tarefas(props) {
@@ -58,7 +72,7 @@ export default function Tarefas(props) {
       const NewTagdata = {
         tag: {
           name: TagName,
-          id: Math.random(),
+          id: `tag - ${Math.floor(Math.random() * 10991)}`,
         },
         columnindex,
         cardindex,
@@ -66,7 +80,7 @@ export default function Tarefas(props) {
 
       dispatch(NewTag(NewTagdata));
       setTagName("");
-    } else window.alert("Por favor, insíra um titulo");
+    } else toast.error("Por favor, insíra um titulo na tag");
   }
 
   function Entertotag(e) {
@@ -74,27 +88,51 @@ export default function Tarefas(props) {
     if (e.key === "Escape") setShowInput(false);
   }
 
+  function DeleteItem() {
+    const indexes = {
+      columnindex,
+      cardindex,
+    };
+    dispatch(DeleteCard(indexes));
+    console.log(card);
+  }
+
   return (
-    <TarefasComponent>
-      <CardN>{card.name}</CardN>
-      <TagsContainer>
-        {card.tags.map((tag) => (
-          <Tags
-            tag={tag}
-            color={color}
-            ShowInput={ShowInput}
-            setShowInput={setShowInput}
-          />
-        ))}
-        <FakeTagInput
-          placeholder="Nova Tag..."
-          color={color}
-          autoFocus
-          onKeyDown={Entertotag}
-          onChange={(e) => setTagName(e.target.value)}
-          value={TagName}
-        />
-      </TagsContainer>
-    </TarefasComponent>
+    <Draggable draggableId={card.id} key={card.id} index={cardindex}>
+      {(provided) => (
+        <TarefasComponent
+          {...provided.draggableProps}
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+        >
+          <TopRow>
+            <button onClick={DeleteItem}>X</button>
+          </TopRow>
+          <CardN>{card.name}</CardN>
+          <TagsContainer>
+            {card.tags.map((tag, tagindex) => (
+              <Tags
+                tag={tag}
+                color={color}
+                ShowInput={ShowInput}
+                setShowInput={setShowInput}
+                tagindex={tagindex}
+                columnindex={columnindex}
+                cardindex={cardindex}
+              />
+            ))}
+
+            <FakeTagInput
+              placeholder="Nova Tag..."
+              color={color}
+              autoFocus
+              onKeyDown={Entertotag}
+              onChange={(e) => setTagName(e.target.value)}
+              value={TagName}
+            />
+          </TagsContainer>
+        </TarefasComponent>
+      )}
+    </Draggable>
   );
 }

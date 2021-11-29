@@ -13,3 +13,12 @@ body {
   margin-top: 40px;
   background-color: #e1e8ed;
 }
+
+.lampada {
+  position: absolute;
+  z-index: -1;
+  left: 47.92%;
+  right: 4.72%;
+  top: 52.67%;
+  bottom: 1.78%;
+}

@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import Tarefas from "../Tarefas";
+import plusbranco from "../../assets/branco.svg";
+import dotsMenu from "../../assets/dots-vertical.png";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { NewCard } from "../../Store/kanban/index";
-import plusbranco from "../../assets/branco.svg";
+import { NewCard, DeleteColumn } from "../../Store/kanban/index";
+import { toast } from "react-toastify";
+import { Droppable } from "react-beautiful-dnd";
 
 const ColunaContainer = styled.div`
   background-color: ${(props) => props.color};
@@ -25,10 +28,20 @@ const TopRow = styled.div`
     background: transparent;
     border: none;
     outline: none;
+    cursor: pointer;
+  }
+
+  img {
+    width: 20px;
+
+    :hover {
+      background: rgba(255, 255, 255, 30%);
+      border-radius: 25px;
+    }
   }
 `;
 const TasksContainer = styled.div``;
-const TextIcon = styled.h1`
+const TextIcon = styled.div`
   font-size: 18px;
   margin-bottom: 10px;
   display: flex;
@@ -40,11 +53,11 @@ const Text = styled.h1`
   font-size: 18px;
   line-height: 25px;
 `;
-const Icon = styled.h1`
+const Icon = styled.p`
   margin-bottom: 2px;
-  font-size: 18px;
+  font-size: 21px;
   line-height: 25px;
-  color: none;
+  cursor: pointer;
 `;
 
 const NewCardButton = styled.div`
@@ -101,21 +114,21 @@ export default function Coluna(props) {
       const dados = {
         card: {
           name: Card,
-          id: Math.random(),
+          id: `card - ${Math.floor(Math.random() * 10991)}`,
           tags: [
             {
               name: `Tag ${index + 1}`,
-              id: Math.random(),
+              id: `tag - ${Math.floor(Math.random() * 10291)}`,
             },
           ],
         },
         index,
       };
-      console.log(dados);
+
       setCard("");
       setCardinput(false);
       dispatch(NewCard(dados));
-    } else window.alert("Por favor, insíra um titulo");
+    } else toast.error("Por favor, insíra um titulo no card");
   }
 
   function EnterToSave(e) {
@@ -127,27 +140,41 @@ export default function Coluna(props) {
     }
   }
 
+  function Deletecolumn() {
+    dispatch(DeleteColumn(index));
+  }
+
   return (
     <ColunaContainer color={coluna.color}>
       <ColunaContent>
-        <TopRow></TopRow>
-
+        <TopRow onClick={Deletecolumn}>
+          <button>
+            <img src={dotsMenu} alt="dotsmenu" />
+          </button>
+        </TopRow>
         <TextIcon>
           <Icon>{coluna.icon}</Icon>
           <Text> {coluna.name}</Text>
         </TextIcon>
-
-        <TasksContainer>
-          {coluna.cards.map((card, cardindex) => (
-            <Tarefas
-              card={card}
-              key={card.id}
-              color={coluna.color}
-              cardindex={cardindex}
-              columnindex={index}
-            />
-          ))}
-        </TasksContainer>
+        <Droppable droppableId={coluna.id.toString()}>
+          {(provided) => (
+            <TasksContainer
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {coluna.cards.map((card, cardindex) => (
+                <Tarefas
+                  card={card}
+                  key={cardindex}
+                  color={coluna.color}
+                  cardindex={cardindex}
+                  columnindex={index}
+                />
+              ))}
+              {provided.placeholder}
+            </TasksContainer>
+          )}
+        </Droppable>
         {cardinput && (
           <FakeCardContainer>
             <FakeCard
@@ -156,6 +183,10 @@ export default function Coluna(props) {
               value={Card}
               onKeyDown={EnterToSave}
               autoFocus
+              onBlur={() => {
+                if (Card !== "") SubmitNewCard();
+                if (Card === "") setCardinput(false);
+              }}
             ></FakeCard>
           </FakeCardContainer>
         )}
