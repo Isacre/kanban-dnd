@@ -13,21 +13,16 @@ export const ColunaContent = styled.div`
   width: 100%fit-content;
 `;
 export const TopRow = styled.div`
-  button {
+  margin-left: 10px;
+  h2 {
     float: right;
-    color: red;
+    color: rgba(255, 255, 255, 80%);
     background: transparent;
     border: none;
     outline: none;
     cursor: pointer;
-  }
-
-  img {
-    width: 20px;
-
     :hover {
-      background: rgba(255, 255, 255, 30%);
-      border-radius: 25px;
+      color: rgba(255, 255, 255, 100%);
     }
   }
 `;

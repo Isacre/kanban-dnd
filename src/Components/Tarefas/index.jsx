@@ -9,10 +9,36 @@ import {
 
 import { useState } from "react";
 import Tags from "../Tags";
-import { NewTag, DeleteCard } from "../../Store/kanban/index";
+import { NewTag, DeleteCard, EditCardName } from "../../Store/kanban/index";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Draggable } from "react-beautiful-dnd";
+import { MdModeEdit, MdOutlineDeleteForever } from "react-icons/md";
+import styled from "styled-components";
+
+const ICONS = styled.div`
+  float: right;
+  cursor: pointer;
+  color: ${(props) => props.color};
+  display: flex;
+
+  div {
+    :hover {
+      filter: brightness(150%);
+    }
+  }
+`;
+
+const RenameInput = styled.input`
+  color: #212529;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 21px;
+  word-break: break-all;
+  border: none;
+  background-color: transparent;
+  outline: none;
+`;
 
 export default function Tarefas(props) {
   const dispatch = useDispatch();
@@ -20,6 +46,8 @@ export default function Tarefas(props) {
   const card = props.card;
   const [ShowInput, setShowInput] = useState(false);
   const [TagName, setTagName] = useState("");
+  const [NewCardName, setNewCardName] = useState("");
+  const [CardInputOn, setCardInputOn] = useState(false);
   const cardindex = props.cardindex;
   const columnindex = props.columnindex;
 
@@ -53,6 +81,32 @@ export default function Tarefas(props) {
     console.log(card);
   }
 
+  function ChangeCardName() {
+    if (NewCardName !== "") {
+      const NovoTitulo = {
+        NewCard: NewCardName,
+        ColumnIndex: columnindex,
+        CardIndex: cardindex,
+      };
+      dispatch(EditCardName(NovoTitulo));
+      setCardInputOn(false);
+      toast.success("Cartão alterado com sucesso");
+    } else
+      toast.error("Por favor insira um titulo ou pressione ESC para cancelar");
+  }
+
+  function EnterToRename(e) {
+    if (e.key === "Enter") {
+      ChangeCardName();
+      setNewCardName("");
+    }
+
+    if (e.key === "Escape") {
+      setCardInputOn(false);
+      setNewCardName("");
+    }
+  }
+
   return (
     <Draggable draggableId={card.id} key={card.id} index={cardindex}>
       {(provided) => (
@@ -60,11 +114,30 @@ export default function Tarefas(props) {
           {...provided.draggableProps}
           ref={provided.innerRef}
           {...provided.dragHandleProps}
+          onBlur={() => setCardInputOn(false)}
         >
           <TopRow>
-            <button onClick={DeleteItem}>X</button>
+            <ICONS color={color}>
+              <div>
+                <MdModeEdit onClick={() => setCardInputOn(!CardInputOn)} />
+              </div>
+              <div>
+                <MdOutlineDeleteForever onClick={DeleteItem} />
+              </div>
+            </ICONS>
           </TopRow>
-          <CardN>{card.name}</CardN>
+          {CardInputOn ? (
+            <RenameInput
+              autoFocus
+              type="text"
+              value={NewCardName}
+              onChange={(event) => setNewCardName(event.target.value)}
+              onKeyDown={EnterToRename}
+              placeholder={card.name}
+            />
+          ) : (
+            <CardN>{card.name}</CardN>
+          )}
           <TagsContainer>
             {card.tags.map((tag, tagindex) => (
               <Tags
@@ -82,7 +155,6 @@ export default function Tarefas(props) {
             <FakeTagInput
               placeholder="Nova Tag..."
               color={color}
-              autoFocus
               onKeyDown={Entertotag}
               onChange={(e) => setTagName(e.target.value)}
               value={TagName}

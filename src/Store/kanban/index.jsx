@@ -155,6 +155,16 @@ const KanbanReducer = createSlice({
       sourceColumn.cards.splice(cardIndex, 1);
       destinationColumn.cards.splice(ColumnIndex, 0, transferCard);
     },
+    EditColumnName(state, action) {
+      const { payload } = action;
+      const { NewCard, ColumnIndex } = payload;
+      state.column[ColumnIndex].name = NewCard;
+    },
+    EditCardName(state, action) {
+      const { payload } = action;
+      const { NewCard, ColumnIndex, CardIndex } = payload;
+      state.column[ColumnIndex].cards[CardIndex].name = NewCard;
+    },
   },
 });
 
@@ -168,5 +178,7 @@ export const {
   DeleteCard,
   DeleteTg,
   MoveCardToColumn,
+  EditColumnName,
+  EditCardName,
 } = KanbanReducer.actions;
 export default KanbanReducer.reducer;
