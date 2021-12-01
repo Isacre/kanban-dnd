@@ -162,7 +162,7 @@ export default function Coluna(props) {
           <EditColumnButton renameInput={renameInput}>
             <MdEdit
               onClick={() => {
-                setrenameInput(!renameInput);
+                setrenameInput(true);
                 setColorpalleton(false);
                 setShowEmojiPicker(false);
               }}

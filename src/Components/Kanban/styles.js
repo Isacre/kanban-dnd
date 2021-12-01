@@ -11,7 +11,7 @@ export const Title = styled.h1`
 
 export const Columns = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 25px;
 `;
 
 export const AddColumnButton = styled.button`
@@ -20,10 +20,7 @@ export const AddColumnButton = styled.button`
   border: none;
   outline: none;
   height: 54px;
-  margin-right: 50px;
-
   background-color: #cad1d5;
-  color: #43474b;
   margin-top: 40px;
   cursor: pointer;
   display: flex;
@@ -63,4 +60,5 @@ export const NewColumnText = styled.div`
   margin-left: 5px;
   margin-top: 19px;
   font-size: 16px;
+  color: black;
 `;
