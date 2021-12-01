@@ -30,7 +30,6 @@ const ICONS = styled.div`
 `;
 
 const RenameInput = styled.input`
-  color: #212529;
   margin-top: 10px;
   font-size: 16px;
   line-height: 21px;
@@ -38,6 +37,9 @@ const RenameInput = styled.input`
   border: none;
   background-color: transparent;
   outline: none;
+  ::placeholder {
+    color: rgb(33, 37, 41, 50%);
+  }
 `;
 
 export default function Tarefas(props) {
@@ -118,12 +120,12 @@ export default function Tarefas(props) {
         >
           <TopRow>
             <ICONS color={color}>
-              <div>
+              <h3>
                 <MdModeEdit onClick={() => setCardInputOn(!CardInputOn)} />
-              </div>
-              <div>
+              </h3>
+              <h3>
                 <MdOutlineDeleteForever onClick={DeleteItem} />
-              </div>
+              </h3>
             </ICONS>
           </TopRow>
           {CardInputOn ? (
@@ -148,7 +150,7 @@ export default function Tarefas(props) {
                 tagindex={tagindex}
                 columnindex={columnindex}
                 cardindex={cardindex}
-                key={Draggable}
+                key={tag.id}
               />
             ))}
 

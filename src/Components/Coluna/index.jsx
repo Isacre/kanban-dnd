@@ -36,13 +36,55 @@ import Picker from "emoji-picker-react";
 
 const ColorPicker = styled.div`
   position: absolute;
-  margin-top: 20px;
-  margin-left: 40px;
+  margin-top: 50px;
+  margin-left: 50px;
 `;
 const EMOJIDIV = styled.div`
   position: absolute;
   margin-top: 50px;
   margin-left: 15px;
+`;
+
+const DeleteColumnButton = styled.h2`
+  float: right;
+  color: rgba(255, 255, 255, 50%);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  :hover {
+    color: rgba(255, 0, 0, 60%);
+  }
+`;
+const EditColumnButton = styled.h2`
+  float: right;
+  color: ${(props) =>
+    props.renameInput
+      ? "rgba(255, 255, 255, 100%);"
+      : "rgba(255, 255, 255, 50%);"};
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  :hover {
+    color: rgba(255, 255, 255, 80%);
+  }
+`;
+const RecolorColumnButton = styled.h2`
+  float: right;
+  color: ${(props) =>
+    props.colorpalleton
+      ? "rgba(255, 255, 255, 100%);"
+      : "rgba(255, 255, 255, 50%);"};
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  :hover {
+    color: rgba(255, 255, 255, 80%);
+  }
 `;
 
 export default function Coluna(props) {
@@ -128,6 +170,15 @@ export default function Coluna(props) {
       setShowEmojiPicker(false);
     }
   }
+  function EnterToCloseColors(e) {
+    if (e.key === "Enter") {
+      setColorpalleton(false);
+    }
+
+    if (e.key === "Escape") {
+      setColorpalleton(false);
+    }
+  }
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject);
@@ -141,52 +192,58 @@ export default function Coluna(props) {
 
   return (
     <ColunaContainer color={coluna.color}>
+      {colorpalleton && (
+        <ColorPicker>
+          <ChromePicker
+            color={Color}
+            onChange={(updatedcolor) => {
+              setColor(updatedcolor.hex);
+              const NovaCor = {
+                NewColor: Color,
+                ColumnIndex: index,
+              };
+              dispatch(ChangeColumnColor(NovaCor));
+            }}
+          />
+        </ColorPicker>
+      )}
       {ShowEmojiPicker && (
         <EMOJIDIV onKeyDown={EnterToEmoji}>
           <Picker onEmojiClick={onEmojiClick} />
         </EMOJIDIV>
       )}
-      <ColunaContent>
+      <ColunaContent onBlur={() => setrenameInput(false)}>
         <TopRow>
-          <h2>
+          <DeleteColumnButton>
             <MdOutlineDeleteOutline onClick={Deletecolumn} />
-          </h2>
+          </DeleteColumnButton>
 
-          <h2>
-            <MdEdit onClick={() => setrenameInput(!renameInput)} />
-          </h2>
-          <h2>
+          <EditColumnButton renameInput={renameInput}>
+            <MdEdit
+              onClick={() => {
+                setrenameInput(!renameInput);
+                setColorpalleton(false);
+              }}
+            />
+          </EditColumnButton>
+          <RecolorColumnButton colorpalleton={colorpalleton}>
             <MdOutlineColorLens
               onClick={() => {
                 setColorpalleton(!colorpalleton);
                 setShowEmojiPicker(false);
               }}
             />
-          </h2>
+          </RecolorColumnButton>
         </TopRow>
 
         <TextIcon>
           <Icon
-            onClick={() => setShowEmojiPicker(!ShowEmojiPicker)}
-            onBlur={setShowEmojiPicker}
+            onClick={() => {
+              setShowEmojiPicker(!ShowEmojiPicker);
+              setColorpalleton(false);
+            }}
           >
             {coluna.icon}
-
-            {colorpalleton && (
-              <ColorPicker>
-                <ChromePicker
-                  color={Color}
-                  onChange={(updatedcolor) => {
-                    setColor(updatedcolor.hex);
-                    const NovaCor = {
-                      NewColor: Color,
-                      ColumnIndex: index,
-                    };
-                    dispatch(ChangeColumnColor(NovaCor));
-                  }}
-                />
-              </ColorPicker>
-            )}
           </Icon>
 
           {renameInput ? (

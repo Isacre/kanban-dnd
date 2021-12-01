@@ -9,7 +9,7 @@ export const RenameInput = styled.input`
   border: none;
   outline: none;
   ::placeholder {
-    color: #fff;
+    color: rgba(255, 255, 255, 50%);
   }
 `;
 
@@ -27,17 +27,6 @@ export const ColunaContent = styled.div`
 `;
 export const TopRow = styled.div`
   margin-left: 10px;
-  h2 {
-    float: right;
-    color: rgba(255, 255, 255, 80%);
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    :hover {
-      color: rgba(255, 255, 255, 100%);
-    }
-  }
 `;
 export const TasksContainer = styled.div``;
 export const TextIcon = styled.div`
