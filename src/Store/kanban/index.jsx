@@ -165,6 +165,16 @@ const KanbanReducer = createSlice({
       const { NewCard, ColumnIndex, CardIndex } = payload;
       state.column[ColumnIndex].cards[CardIndex].name = NewCard;
     },
+    ChangeColumnColor(state, action) {
+      const { payload } = action;
+      const { ColumnIndex, NewColor } = payload;
+      state.column[ColumnIndex].color = NewColor;
+    },
+    ChangeColumnEmoji(state, action) {
+      const { payload } = action;
+      const { ColumnIndex, NewIcon } = payload;
+      state.column[ColumnIndex].icon = NewIcon;
+    },
   },
 });
 
@@ -180,5 +190,7 @@ export const {
   MoveCardToColumn,
   EditColumnName,
   EditCardName,
+  ChangeColumnColor,
+  ChangeColumnEmoji,
 } = KanbanReducer.actions;
 export default KanbanReducer.reducer;

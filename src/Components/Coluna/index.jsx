@@ -9,8 +9,13 @@ import {
   NewCardButton,
   FakeCardContainer,
   FakeCard,
+  RenameInput,
 } from "./styles";
-import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md";
+import {
+  MdEdit,
+  MdOutlineDeleteOutline,
+  MdOutlineColorLens,
+} from "react-icons/md";
 import React from "react";
 import Tarefas from "../Tarefas";
 import plusbranco from "../../assets/branco.svg";
@@ -20,45 +25,38 @@ import {
   NewCard,
   DeleteColumn,
   EditColumnName,
+  ChangeColumnColor,
+  ChangeColumnEmoji,
 } from "../../Store/kanban/index";
 import { toast } from "react-toastify";
 import { Droppable } from "react-beautiful-dnd";
+import { ChromePicker } from "react-color";
 import styled from "styled-components";
+import Picker from "emoji-picker-react";
 
-const RenameInput = styled.input`
-  font-family: AvenirBold;
-  color: white;
-  font-size: 18px;
-  line-height: 25px;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  ::placeholder {
-    color: #fff;
-  }
+const ColorPicker = styled.div`
+  position: absolute;
+  margin-top: 20px;
+  margin-left: 40px;
 `;
-/* export const TextIcon = styled.div`
-  font-size: 18px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+const EMOJIDIV = styled.div`
+  position: absolute;
+  margin-top: 50px;
+  margin-left: 15px;
 `;
-export const Text = styled.h1`
-  font-family: AvenirBold;
-  color: white;
-  font-size: 18px;
-  line-height: 25px;
-`; */
 
 export default function Coluna(props) {
+  const coluna = props.coluna;
+  const index = props.index;
   const dispatch = useDispatch();
   const [cardinput, setCardinput] = useState(false);
   const [Card, setCard] = useState("");
   const [RenameCard, setRenameCard] = useState("");
   const [renameInput, setrenameInput] = useState(false);
-  const coluna = props.coluna;
-  const index = props.index;
+  const [Color, setColor] = useState(coluna.color);
+  const [colorpalleton, setColorpalleton] = useState(false);
+  const [ShowEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [chosenEmoji, setChosenEmoji] = useState(coluna.icon);
 
   function SubmitNewCard() {
     if (Card !== "") {
@@ -117,14 +115,37 @@ export default function Coluna(props) {
     }
 
     if (e.key === "Escape") {
-      e.target.value = "";
       setrenameInput(false);
       setRenameCard("");
     }
   }
+  function EnterToEmoji(e) {
+    if (e.key === "Enter") {
+      setShowEmojiPicker(false);
+    }
+
+    if (e.key === "Escape") {
+      setShowEmojiPicker(false);
+    }
+  }
+
+  const onEmojiClick = (event, emojiObject) => {
+    setChosenEmoji(emojiObject);
+    const EmojiData = {
+      ColumnIndex: index,
+      NewIcon: emojiObject.emoji,
+    };
+
+    dispatch(ChangeColumnEmoji(EmojiData));
+  };
 
   return (
     <ColunaContainer color={coluna.color}>
+      {ShowEmojiPicker && (
+        <EMOJIDIV onKeyDown={EnterToEmoji}>
+          <Picker onEmojiClick={onEmojiClick} />
+        </EMOJIDIV>
+      )}
       <ColunaContent>
         <TopRow>
           <h2>
@@ -134,10 +155,40 @@ export default function Coluna(props) {
           <h2>
             <MdEdit onClick={() => setrenameInput(!renameInput)} />
           </h2>
+          <h2>
+            <MdOutlineColorLens
+              onClick={() => {
+                setColorpalleton(!colorpalleton);
+                setShowEmojiPicker(false);
+              }}
+            />
+          </h2>
         </TopRow>
 
         <TextIcon>
-          <Icon>{coluna.icon}</Icon>
+          <Icon
+            onClick={() => setShowEmojiPicker(!ShowEmojiPicker)}
+            onBlur={setShowEmojiPicker}
+          >
+            {coluna.icon}
+
+            {colorpalleton && (
+              <ColorPicker>
+                <ChromePicker
+                  color={Color}
+                  onChange={(updatedcolor) => {
+                    setColor(updatedcolor.hex);
+                    const NovaCor = {
+                      NewColor: Color,
+                      ColumnIndex: index,
+                    };
+                    dispatch(ChangeColumnColor(NovaCor));
+                  }}
+                />
+              </ColorPicker>
+            )}
+          </Icon>
+
           {renameInput ? (
             <RenameInput
               autoFocus

@@ -8,7 +8,6 @@ import {
   NewColumnText,
   DIV,
 } from "./styles";
-
 import Coluna from "../Coluna";
 import pluspreto from "../../assets/preto.svg";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,14 +16,13 @@ import { MoveCardToColumn, NewColumn } from "../../Store/kanban";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DragDropContext } from "react-beautiful-dnd";
-import { ChromePicker } from "react-color";
 
 export default function Kanban() {
   const data = useSelector((state) => state.kanban.column);
   const dispatch = useDispatch();
   const [NewInputOn, setNewInputOn] = useState(false);
   const [ColumnName, setColumnName] = useState("");
-  const [color, setColor] = useState("#5cc4ff");
+  const color = "#5cc4ff";
 
   function SubmitNewColumn() {
     if (ColumnName !== "") {
@@ -83,13 +81,8 @@ export default function Kanban() {
               value={ColumnName}
               onKeyDown={EnterToSave}
               autoFocus
+              onBlur={() => setNewInputOn(false)}
             />
-            <DIV>
-              <ChromePicker
-                color={color}
-                onChange={(updatedcolor) => setColor(updatedcolor.hex)}
-              />
-            </DIV>
           </NewColumnInput>
         )}
         <AddColumnButton onClick={() => setNewInputOn(true)}>

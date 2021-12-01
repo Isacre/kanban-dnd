@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+export const RenameInput = styled.input`
+  font-family: AvenirBold;
+  color: white;
+  font-size: 18px;
+  line-height: 25px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  ::placeholder {
+    color: #fff;
+  }
+`;
+
 export const ColunaContainer = styled.div`
   background-color: ${(props) => props.color};
   height: 100%;
