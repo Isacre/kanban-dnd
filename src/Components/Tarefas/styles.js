@@ -52,3 +52,30 @@ export const TopRow = styled.div`
     cursor: pointer;
   }
 `;
+
+export const ICONS = styled.div`
+  float: right;
+  cursor: pointer;
+  color: ${(props) => props.color};
+  display: flex;
+  gap: 5px;
+
+  div {
+    :hover {
+      filter: brightness(150%);
+    }
+  }
+`;
+
+export const RenameInput = styled.input`
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 21px;
+  word-break: break-all;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  ::placeholder {
+    color: rgb(33, 37, 41, 50%);
+  }
+`;

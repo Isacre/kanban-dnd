@@ -6,23 +6,22 @@ import {
   AddColumnButton,
   NewColumnInput,
   NewColumnText,
-  DIV,
 } from "./styles";
-import Coluna from "../Coluna";
-import pluspreto from "../../assets/preto.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { MoveCardToColumn, NewColumn } from "../../Store/kanban";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { DragDropContext } from "react-beautiful-dnd";
+import "react-toastify/dist/ReactToastify.css";
+import Coluna from "../Coluna";
+import pluspreto from "../../assets/preto.svg";
 
 export default function Kanban() {
   const data = useSelector((state) => state.kanban.column);
+  const color = "#5cc4ff";
   const dispatch = useDispatch();
   const [NewInputOn, setNewInputOn] = useState(false);
   const [ColumnName, setColumnName] = useState("");
-  const color = "#5cc4ff";
 
   function SubmitNewColumn() {
     if (ColumnName !== "") {

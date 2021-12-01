@@ -28,7 +28,6 @@ export const ColunaContent = styled.div`
 export const TopRow = styled.div`
   margin-left: 10px;
 `;
-export const TasksContainer = styled.div``;
 export const TextIcon = styled.div`
   font-size: 18px;
   margin-bottom: 10px;
@@ -91,3 +90,63 @@ export const FakeCard = styled.input`
     text-align: center;
   }
 `;
+
+export const ColorPicker = styled.div`
+  position: absolute;
+  margin-top: 50px;
+  margin-left: 50px;
+`;
+export const EMOJIDIV = styled.div`
+  position: absolute;
+  margin-top: 50px;
+  margin-left: 15px;
+`;
+
+export const DeleteColumnButton = styled.h2`
+  float: right;
+  color: rgba(255, 255, 255, 50%);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  :hover {
+    color: rgba(255, 0, 0, 100%);
+  }
+`;
+export const EditColumnButton = styled.h2`
+  float: right;
+  color: ${(props) =>
+    props.renameInput
+      ? "rgba(255, 255, 255, 100%);"
+      : "rgba(255, 255, 255, 50%);"};
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  :hover {
+    color: ${(props) =>
+      props.renameInput
+        ? "rgba(255, 255, 255, 100%);"
+        : "rgba(255, 255, 255, 80%);"};
+  }
+`;
+export const RecolorColumnButton = styled.h2`
+  float: right;
+  color: ${(props) =>
+    props.colorpalleton
+      ? "rgba(255, 255, 255, 100%);"
+      : "rgba(255, 255, 255, 50%);"};
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  :hover {
+    color: ${(props) =>
+      props.colorpalleton
+        ? "rgba(255, 255, 255, 100%);"
+        : "rgba(255, 255, 255, 80%);"};
+  }
+`;
+export const TasksContainer = styled.div``;

@@ -10,17 +10,12 @@ import {
   FakeCardContainer,
   FakeCard,
   RenameInput,
+  ColorPicker,
+  EMOJIDIV,
+  DeleteColumnButton,
+  EditColumnButton,
+  RecolorColumnButton,
 } from "./styles";
-import {
-  MdEdit,
-  MdOutlineDeleteOutline,
-  MdOutlineColorLens,
-} from "react-icons/md";
-import React from "react";
-import Tarefas from "../Tarefas";
-import plusbranco from "../../assets/branco.svg";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   NewCard,
   DeleteColumn,
@@ -28,64 +23,20 @@ import {
   ChangeColumnColor,
   ChangeColumnEmoji,
 } from "../../Store/kanban/index";
+import {
+  MdEdit,
+  MdOutlineDeleteOutline,
+  MdOutlineColorLens,
+} from "react-icons/md";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Droppable } from "react-beautiful-dnd";
 import { ChromePicker } from "react-color";
-import styled from "styled-components";
+import React from "react";
+import Tarefas from "../Tarefas";
+import plusbranco from "../../assets/branco.svg";
 import Picker from "emoji-picker-react";
-
-const ColorPicker = styled.div`
-  position: absolute;
-  margin-top: 50px;
-  margin-left: 50px;
-`;
-const EMOJIDIV = styled.div`
-  position: absolute;
-  margin-top: 50px;
-  margin-left: 15px;
-`;
-
-const DeleteColumnButton = styled.h2`
-  float: right;
-  color: rgba(255, 255, 255, 50%);
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  :hover {
-    color: rgba(255, 0, 0, 60%);
-  }
-`;
-const EditColumnButton = styled.h2`
-  float: right;
-  color: ${(props) =>
-    props.renameInput
-      ? "rgba(255, 255, 255, 100%);"
-      : "rgba(255, 255, 255, 50%);"};
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  :hover {
-    color: rgba(255, 255, 255, 80%);
-  }
-`;
-const RecolorColumnButton = styled.h2`
-  float: right;
-  color: ${(props) =>
-    props.colorpalleton
-      ? "rgba(255, 255, 255, 100%);"
-      : "rgba(255, 255, 255, 50%);"};
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  :hover {
-    color: rgba(255, 255, 255, 80%);
-  }
-`;
 
 export default function Coluna(props) {
   const coluna = props.coluna;
@@ -170,23 +121,13 @@ export default function Coluna(props) {
       setShowEmojiPicker(false);
     }
   }
-  function EnterToCloseColors(e) {
-    if (e.key === "Enter") {
-      setColorpalleton(false);
-    }
-
-    if (e.key === "Escape") {
-      setColorpalleton(false);
-    }
-  }
 
   const onEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject);
+    if (emojiObject) setChosenEmoji(emojiObject);
     const EmojiData = {
       ColumnIndex: index,
       NewIcon: emojiObject.emoji,
     };
-
     dispatch(ChangeColumnEmoji(EmojiData));
   };
 
@@ -209,7 +150,7 @@ export default function Coluna(props) {
       )}
       {ShowEmojiPicker && (
         <EMOJIDIV onKeyDown={EnterToEmoji}>
-          <Picker onEmojiClick={onEmojiClick} />
+          <Picker onEmojiClick={onEmojiClick} chosenEmoji={chosenEmoji} />
         </EMOJIDIV>
       )}
       <ColunaContent onBlur={() => setrenameInput(false)}>
@@ -223,6 +164,7 @@ export default function Coluna(props) {
               onClick={() => {
                 setrenameInput(!renameInput);
                 setColorpalleton(false);
+                setShowEmojiPicker(false);
               }}
             />
           </EditColumnButton>

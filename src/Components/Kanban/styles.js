@@ -64,9 +64,3 @@ export const NewColumnText = styled.div`
   margin-top: 19px;
   font-size: 16px;
 `;
-
-export const DIV = styled.div`
-  width: 100%;
-  display: grid;
-  place-items: center;
-`;

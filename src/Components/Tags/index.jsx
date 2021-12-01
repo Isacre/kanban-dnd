@@ -1,6 +1,5 @@
 import React from "react";
 import { TagContainer } from "./styles";
-
 import { useDispatch } from "react-redux";
 import { DeleteTg } from "../../Store/kanban";
 

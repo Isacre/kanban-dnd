@@ -5,53 +5,27 @@ import {
   TagsContainer,
   FakeTagInput,
   TopRow,
+  ICONS,
+  RenameInput,
 } from "./styles";
-
 import { useState } from "react";
-import Tags from "../Tags";
 import { NewTag, DeleteCard, EditCardName } from "../../Store/kanban/index";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Draggable } from "react-beautiful-dnd";
 import { MdModeEdit, MdOutlineDeleteForever } from "react-icons/md";
-import styled from "styled-components";
-
-const ICONS = styled.div`
-  float: right;
-  cursor: pointer;
-  color: ${(props) => props.color};
-  display: flex;
-
-  div {
-    :hover {
-      filter: brightness(150%);
-    }
-  }
-`;
-
-const RenameInput = styled.input`
-  margin-top: 10px;
-  font-size: 16px;
-  line-height: 21px;
-  word-break: break-all;
-  border: none;
-  background-color: transparent;
-  outline: none;
-  ::placeholder {
-    color: rgb(33, 37, 41, 50%);
-  }
-`;
+import Tags from "../Tags";
 
 export default function Tarefas(props) {
-  const dispatch = useDispatch();
   const color = props.color;
   const card = props.card;
+  const cardindex = props.cardindex;
+  const columnindex = props.columnindex;
+  const dispatch = useDispatch();
   const [ShowInput, setShowInput] = useState(false);
   const [TagName, setTagName] = useState("");
   const [NewCardName, setNewCardName] = useState("");
   const [CardInputOn, setCardInputOn] = useState(false);
-  const cardindex = props.cardindex;
-  const columnindex = props.columnindex;
 
   function SubmitNewTag() {
     if (TagName !== "") {
