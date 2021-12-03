@@ -1,6 +1,6 @@
 # Kanban DND
 
-Kanban desenvolvido em React como exércicio de React, Redux Manipulação de estado.
+Kanban desenvolvido em React como exércicio de React, Redux e Manipulação de estado.
 
 ## Como vizualizar o projeto
 
